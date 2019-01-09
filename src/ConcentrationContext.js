@@ -13,11 +13,12 @@ class Provider extends React.Component {
     }
     
     render(){
-	return (
-	    <Context.Provider value={{state: this.state}}>
-		{this.props.children}
-	    </Context.Provider>
-	)
+		return (
+			<Context.Provider value={{state: this.state}}>
+			{this.props.children}
+			Concentration
+			</Context.Provider>
+		)
     }
 }
 

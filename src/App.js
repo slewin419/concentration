@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
 import Provider from './ConcentrationContext';
-import logo from './logo.svg';
+import { SquareGrid } from './SquareGrid';
+//import logo from './logo.svg';
 import './App.css';
 
 class App extends Component {
   render() {
     return (
-      <div>
-      </div>
+      <Provider>
+          <SquareGrid size={5}></SquareGrid>
+      </Provider>
     );
   }
 }
