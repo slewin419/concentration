@@ -15,12 +15,12 @@ class Card extends React.Component {
     }
 
     render() {
-        let flipped = this.state.flipped ? 'flipped': '';
+        let flipped = '';//this.state.flipped ? 'flipped': '';
         return (
-            <div className={'card ' + flipped} onClick={()=>this.handleClick()}>
-                <div className="card-wrapper">
-                    <div className="front side">Front</div>
-                    <div className="back side">Back</div>
+            <div className={'card flipped' + flipped} onClick={()=>this.handleClick()}>
+                <div className="card-wrapper ">
+                    <div className="front side"></div>
+                    <div className="back side html5"></div>
                 </div>
             </div>
         )
