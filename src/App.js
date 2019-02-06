@@ -8,7 +8,20 @@ class App extends React.Component {
     constructor(props){
         super(props);
 
-        this.state = {};
+        this.state = {
+            boardSize: "44",
+            cards: []
+        };
+    }
+
+    newGame(e){
+        e.preventDefault();
+
+        let boardSize = this.refs.boardSize.value;
+        this.setState({
+            boardSize: boardSize,
+            cards: []
+        });
     }
 
     render() {
@@ -16,10 +29,10 @@ class App extends React.Component {
             <main>
                 <div className="container-fluid">
                     <div className="row">
-                        <div className="col-sm-9">
-                            <Game />
+                        <div className="col-xs-12 col-sm-9">
+                            <Game boardSize={this.state.boardSize}/>
                         </div>
-                        <div className="col-sm-3">
+                        <div className="col-xs-12 col-sm-3">
                             <div id="status" className="row">
                                 <hr/>
                                 <div className="well well-lg text-center">
@@ -51,14 +64,26 @@ class App extends React.Component {
                                 <form className="form">
                                     <div className="form-group">
                                         <label>Board Size: </label>
-                                        <select id="board-size" className="form-control">
-                                            <option>4x4</option>
-                                            <option>5x4</option>
-                                            <option>6x5</option>
-                                            <option>6x6</option>
+                                        <select
+                                            id="board-size"
+                                            ref="boardSize"
+                                            className="form-control"
+                                        >
+                                            <option value="44">4x4</option>
+                                            <option value="45">4x5</option>
+                                            <option value="46">4x6</option>
+                                            <option value="54">5x4</option>
+                                            <option value="56">5x6</option>
+                                            <option value="64">6x4</option>
+                                            <option value="65">6x5</option>
+                                            <option value="66">6x6</option>
                                         </select>
                                     </div>
-                                    <button className="btn btn-lg btn-primary btn-block">New Game</button>
+                                    <button
+                                        className="btn btn-lg btn-primary btn-block"
+                                        onClick={(e) => this.newGame(e)}>
+                                        New Game
+                                    </button>
                                 </form>
                             </div>
                         </div>

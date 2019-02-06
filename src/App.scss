@@ -6,6 +6,8 @@ main {
   display:inline-block;
   width: 6vw;
   height: 6vw;
+  min-width: 50px;
+  min-height: 50px;
   max-width: 80px;
   max-height: 80px;
   margin: 5px;
@@ -42,17 +44,14 @@ main {
 }
 
 #board {
-  width: 550px;
   margin: 0 auto;
+  text-align: center;
 }
 
 #timer, #board-size {
-  font-size: 20px;
+  font-size: 16px;
 }
 
 #status {
-  position: fixed;
-  height: 100%;
-  width: 25%;
-  right: 5%;
+
 }

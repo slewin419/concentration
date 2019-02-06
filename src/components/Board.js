@@ -7,24 +7,29 @@ class Board extends React.Component {
     constructor(props) {
         super(props);
 
-        this.boardSize = props.size; //e.g.[4,4]
+        this.state = {
+            size: "44"
+        };
     }
 
+    componentWillReceiveProps(props){
+        this.setState({size: props.size});
+    }
 
     renderCard(imgId) {
         return <Card key={imgId} img={imgId}/>
     }
 
     renderBoard() {
-        let board = [], total = 0;
+        let board = [], total = 0, size = this.state.size;
 
-        for (let i = 0; i < this.boardSize[1]; i++) {
+        for (let i = 0; i < size[1]; i++) {
             let rows = [];
-            for (let j = 0; j < this.boardSize[0]; j++) {
+            for (let j = 0; j < size[0]; j++) {
                 rows.push(this.renderCard(total));
                 ++total;
             }
-            rows.push(<br/>);
+            rows.push(<br key={++total}/>);
             board.push(rows);
         }
 
@@ -32,6 +37,7 @@ class Board extends React.Component {
     }
 
     render() {
+        console.log('board:render');
         return (
             <div id="board">
                 {this.renderBoard()}
