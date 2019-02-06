@@ -1,5 +1,9 @@
 import React from 'react';
 import Card from './Card';
+import shuffle from 'fisher-yates-shuffle';
+
+const SKILL_IMGS = ['bootstrap', 'css3', 'git', 'gulp', 'heroku', 'html5', 'javascript', 'jquery', 'linux',
+                    'materialui','mysql', 'nodejs', 'npm', 'php', 'react', 'sass', 'stackoverflow','zend'];
 
 
 class Board extends React.Component {
@@ -16,23 +20,20 @@ class Board extends React.Component {
         this.setState({size: props.size});
     }
 
-    renderCard(imgId) {
-        return <Card key={imgId} img={imgId}/>
+    renderCard(key,img) {
+        return <Card key={key} img={img}/>
     }
 
     renderBoard() {
-        let board = [], total = 0, size = this.state.size;
+        let board = [], total = 0,
+            size = this.state.size,
+            numCards = size[0] * size[1],
+            skills = SKILL_IMGS.slice(0);
 
-        for (let i = 0; i < size[1]; i++) {
-            let rows = [];
-            for (let j = 0; j < size[0]; j++) {
-                rows.push(this.renderCard(total));
-                ++total;
-            }
-            rows.push(<br key={++total}/>);
-            board.push(rows);
+        for (let i = 0; i < (numCards/2); i++) {
+            board.push(this.renderCard(Estf));
+	    board.push(this.renderCard());
         }
-
         return board;
     }
 
