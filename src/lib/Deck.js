@@ -3,7 +3,7 @@ import shuffle from "fisher-yates-shuffle";
 const IMAGES = ['bootstrap', 'css3', 'git', 'gulp', 'heroku', 'html5', 'javascript', 'jquery', 'linux',
     		'materialui','mysql', 'nodejs', 'npm', 'php', 'react', 'sass', 'stackoverflow','zend'];
 
-class Deck {
+export default class Deck {
     
     constructor() {
         this.deck = this.buildDeck();
@@ -15,9 +15,9 @@ class Deck {
      */
     buildDeck(){
         let deck = [];
-    	IMAGES.forEach((img,i, images) => {
-    	    deck.push({id: `${img}-${i}`, img: img, flipped: false, matched: false});
-	    deck.push({id: `${img}-${i}`, img: img, flipped: false, matched: false});
+    	IMAGES.forEach((img,i) => {
+    	    deck.push({id: `${img}-1`, img: img, flipped: false, matched: false});
+	    deck.push({id: `${img}-2`, img: img, flipped: false, matched: false});
 	});
     	return shuffle(deck);
     }

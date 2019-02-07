@@ -7,11 +7,9 @@ class App extends React.Component {
     render() {
         return (
             <div className="container-fluid">
-                <div className="row">
-                    <main>
-                        <Game/>
-                    </main>
-                </div>
+                <main>
+                    <Game/>
+                </main>
             </div>
         );
     }

@@ -1,5 +1,4 @@
 main {
-  padding: 15px;
 }
 
 .card {
@@ -49,13 +48,12 @@ main {
 
 #board {
   margin: 0 auto;
-  text-align: center;
-  width: 280px;
-  height: 280px;
+  width: 320px;
+  height: 320px;
 
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  grid-template-rows: 1fr 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr;
   grid-gap: 3px;
   justify-items: center;
 
