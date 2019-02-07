@@ -5,6 +5,7 @@ import Card from './Card';
 
 class Board extends React.Component {
 
+    
     /**
      *
      * @param props {size,cards}
@@ -21,17 +22,19 @@ class Board extends React.Component {
         return {};
     }
 
-    renderCard(key,img, flipped) {
-        return <Card key={key} id={key} img={img} flipped={flipped}/>
+    renderCard(id,img, flipped, matched) {
+        return <Card key={id}
+                     id={id}
+                     img={img}
+                     flipped={flipped}
+                     matched={matched} />
     }
 
     renderBoard() {
         let cards = [];
-
         this.props.deck.forEach((card,i) => {
-            cards.push(this.renderCard(card.id,card.img,card.flipped));
+            cards.push(this.renderCard(card.id,card.img,card.flipped, card.matched));
         });
-
         return cards;
     }
 
