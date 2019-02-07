@@ -1,25 +1,12 @@
 import React from 'react';
 
 class Card extends React.Component {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            flipped: false
-        };
-    }
-
-    handleClick(){
-        this.setState({flipped: !this.state.flipped});
-    }
-
     render() {
-        let flipped = this.state.flipped ? 'flipped': '';
-        let {img} = this.props;
+        let {id, img, flipped} = this.props;
         return (
-            <div className={'card ' + flipped} onClick={()=>this.handleClick()}>
+            <div className={'card ' + (flipped ? 'flipped':'')}>
                 <div className="card-wrapper ">
-                    <div className="front side"></div>
+                    <div data-match={id} className="front side"></div>
                     <div className={'back side ' + img}></div>
                 </div>
             </div>

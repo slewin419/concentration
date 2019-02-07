@@ -1,7 +1,7 @@
 import React from 'react';
 import Card from './Card';
 
-import shuffle from 'fisher-yates-shuffle';
+//import shuffle from 'fisher-yates-shuffle';
 
 class Board extends React.Component {
 
@@ -14,44 +14,34 @@ class Board extends React.Component {
 
         this.state = {
             size: "44",
-            deck: this.shuffleDeck()
         };
-
-        this.boardClassName = `w${props.size[0]}y${props.size[1]}`;
     }
 
     boardStyle(){
         return {};
     }
 
-    shuffleDeck() {
-        let {deck,size} = this.props;
-        let numCards = size[0]*size[1];
-
-        deck = shuffle(deck).slice(0, numCards/2);
-        return deck;
-    }
-
-
-    renderCard(key,img) {
-        return <Card key={key} img={img}/>
+    renderCard(key,img, flipped) {
+        return <Card key={key} id={key} img={img} flipped={flipped}/>
     }
 
     renderBoard() {
         let cards = [];
 
-        this.state.deck.forEach((card,i) => {
-            cards.push(this.renderCard(`${card}-${++i}`, card));
-            cards.push(this.renderCard(`${card}-${++i}`, card));
+        this.props.deck.forEach((card,i) => {
+            cards.push(this.renderCard(card.id,card.img,card.flipped));
         });
 
-        return shuffle(cards);
+        return cards;
     }
 
     render() {
         console.log('board:render');
         return (
-            <div id="board" className={this.boardClassName} style={this.boardStyle()}>
+            <div id="board"
+                 className={this.boardClassName}
+                 style={this.boardStyle()}
+                 onClick={this.props.onClick}>
                 {this.renderBoard()}
             </div>
         )

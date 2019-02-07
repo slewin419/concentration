@@ -1,6 +1,7 @@
 import React from 'react';
 import Board from './Board';
 import Timer from "./Timer";
+import shuffle from "fisher-yates-shuffle";
 
 
 
@@ -13,15 +14,50 @@ class Game extends React.Component {
 
         this.state = {
             boardSize: "44",
-            seconds: 0
+            seconds: 0,
+            deck: [],
+            pendingCard: false //First card picked?
         };
-
-        //this.setCards();
     }
 
     handleClick(e){
-        console.log('Game:click');
+        let {pendingCard} = this.state, matchCard = null;
+
+        if(!pendingCard) {
+            let pending = e.target.dataset.match;
+            this.setState((oldState,props) => {
+                let pendingIndex = oldState.deck.findIndex((card) => {
+                    return card.id === pending;
+                });
+
+                let newDeck = Array.from(oldState.deck);
+                newDeck[pendingIndex].flipped = true;
+
+                return {
+                    deck: newDeck,
+                    pendingCard: newDeck[pendingIndex].id
+                }
+            });
+        } else {
+            //matchCard = e.target.dataset.match;
+        }
+
+        //console.log(pendingCard,matchCard);
     }
+
+    shuffleDeck() {
+        console.log('Game:shuffleDeck');
+        let {boardSize} = this.state, deck = [];
+        let numCards = boardSize[0] * boardSize[1];
+
+        shuffle(DECK).slice(0, numCards/2).forEach((card, i) => {
+            deck.push({"id":`${card}_${++i}`, "img": card, "flipped": false});
+            deck.push({"id":`${card}_${++i}`, "img": card, "flipped": false});
+        });
+
+        return shuffle(deck);
+    }
+
 
     newGame(e){
         e.preventDefault();
@@ -39,12 +75,18 @@ class Game extends React.Component {
         });
     }
 
+    componentDidMount(){
+        this.setState({
+            deck: this.shuffleDeck()
+        });
+    }
+
     render() {
-        let {boardSize, seconds} = this.state;
+        let {boardSize, seconds,deck} = this.state;
         return (
             <div className="row">
                 <div className="col-sm-9">
-                    <Board size={boardSize} deck={DECK} onClick={this.handleClick}/>
+                    <Board size={boardSize} deck={deck} onClick={(e) => this.handleClick(e)}/>
                 </div>
                 <div id="status" className="col-sm-3">
                     <hr/>
