@@ -1,46 +1,57 @@
 import React from 'react';
 import Card from './Card';
+
 import shuffle from 'fisher-yates-shuffle';
-
-const SKILL_IMGS = ['bootstrap', 'css3', 'git', 'gulp', 'heroku', 'html5', 'javascript', 'jquery', 'linux',
-                    'materialui','mysql', 'nodejs', 'npm', 'php', 'react', 'sass', 'stackoverflow','zend'];
-
 
 class Board extends React.Component {
 
+    /**
+     *
+     * @param props {size,cards}
+     */
     constructor(props) {
         super(props);
 
         this.state = {
-            size: "44"
+            size: "44",
+            deck: this.shuffleDeck()
         };
+
+        this.boardClassName = `w${props.size[0]}y${props.size[1]}`;
     }
 
-    componentWillReceiveProps(props){
-        this.setState({size: props.size});
+    boardStyle(){
+        return {};
     }
+
+    shuffleDeck() {
+        let {deck,size} = this.props;
+        let numCards = size[0]*size[1];
+
+        deck = shuffle(deck).slice(0, numCards/2);
+        return deck;
+    }
+
 
     renderCard(key,img) {
         return <Card key={key} img={img}/>
     }
 
     renderBoard() {
-        let board = [], total = 0,
-            size = this.state.size,
-            numCards = size[0] * size[1],
-            skills = SKILL_IMGS.slice(0);
+        let cards = [];
 
-        for (let i = 0; i < (numCards/2); i++) {
-            board.push(this.renderCard(Estf));
-	    board.push(this.renderCard());
-        }
-        return board;
+        this.state.deck.forEach((card,i) => {
+            cards.push(this.renderCard(`${card}-${++i}`, card));
+            cards.push(this.renderCard(`${card}-${++i}`, card));
+        });
+
+        return shuffle(cards);
     }
 
     render() {
         console.log('board:render');
         return (
-            <div id="board">
+            <div id="board" className={this.boardClassName} style={this.boardStyle()}>
                 {this.renderBoard()}
             </div>
         )

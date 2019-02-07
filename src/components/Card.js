@@ -10,17 +10,17 @@ class Card extends React.Component {
     }
 
     handleClick(){
-        //console.log('clicked');
         this.setState({flipped: !this.state.flipped});
     }
 
     render() {
-        let flipped = '';//this.state.flipped ? 'flipped': '';
+        let flipped = this.state.flipped ? 'flipped': '';
+        let {img} = this.props;
         return (
-            <div className={'card flipped' + flipped} onClick={()=>this.handleClick()}>
+            <div className={'card ' + flipped} onClick={()=>this.handleClick()}>
                 <div className="card-wrapper ">
                     <div className="front side"></div>
-                    <div className="back side html5"></div>
+                    <div className={'back side ' + img}></div>
                 </div>
             </div>
         )
