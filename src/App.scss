@@ -17,6 +17,12 @@ main {
     transform: rotateY(180deg);
   }
 
+  &.matched {
+    border: 1px solid green;
+    border-radius: 3px;
+    pointer-events: none;
+  }
+
   .card-wrapper {
     position: relative;
     height: 100%;

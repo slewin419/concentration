@@ -6,15 +6,15 @@ class App extends React.Component {
 
     render() {
         return (
-            <main>
-                <div className="container-fluid">
-                    <div className="row">
-                        <div className="col-xs-12">
-                            <Game />
-                        </div>
+            <div className="container-fluid">
+                <div className="row">
+                    <div className="col-xs-12">
+                        <main>
+                            <Game/>
+                        </main>
                     </div>
                 </div>
-            </main>
+            </div>
         );
     }
 }

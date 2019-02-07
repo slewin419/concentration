@@ -9,6 +9,7 @@ const DECK = ['bootstrap', 'css3', 'git', 'gulp', 'heroku', 'html5', 'javascript
     'materialui','mysql', 'nodejs', 'npm', 'php', 'react', 'sass', 'stackoverflow','zend'];
 
 class Game extends React.Component {
+
     constructor(props) {
         super(props);
 
@@ -16,35 +17,92 @@ class Game extends React.Component {
             boardSize: "44",
             seconds: 0,
             deck: [],
-            pendingCard: false //First card picked?
+            pendingCard: false, //First card picked?
+            matchCard: false //Second card picked?
         };
+
+        //Use this flag to prevent clicking card while flipping down
+        this.preventClick = false;
     }
 
     handleClick(e){
-        let {pendingCard} = this.state, matchCard = null;
+        if(this.preventClick) return;
+
+        let {pendingCard} = this.state, pending = null;
 
         if(!pendingCard) {
-            let pending = e.target.dataset.match;
-            this.setState((oldState,props) => {
-                let pendingIndex = oldState.deck.findIndex((card) => {
-                    return card.id === pending;
-                });
-
-                let newDeck = Array.from(oldState.deck);
-                newDeck[pendingIndex].flipped = true;
-
-                return {
-                    deck: newDeck,
-                    pendingCard: newDeck[pendingIndex].id
-                }
+            pending = e.target.id;
+            this.setState(oldState => {
+               let {deck, pendingId} = this.flipCard(oldState.deck, pending);
+               return {
+                   deck: deck,
+                   pendingCard: pendingId
+               }
             });
         } else {
-            //matchCard = e.target.dataset.match;
+            let target = e.target, matchId = target.id;
+            this.setState(oldState => {
+                let {deck} = this.flipCard(oldState.deck, matchId);
+                return {
+                    deck: deck,
+                    matchCard: target.dataset.match
+                }
+            });
         }
-
-        //console.log(pendingCard,matchCard);
     }
 
+    /**
+     * Update the deck state array to flip the selected card
+     */
+    flipCard(deck, cardId) {
+        if(!deck.length) return;
+
+        let pendingIndex = deck.findIndex(card => card.id === cardId);
+
+        if(pendingIndex !== -1) {
+            deck[pendingIndex].flipped = true;
+        }
+
+        let flippedCard = deck[pendingIndex];
+
+        return {
+            deck: deck,
+            pendingId: flippedCard && flippedCard['img'] || null
+        };
+    }
+
+    /**
+     * Flip cards down when mismatched cards picked
+     * @param deck
+     */
+    flipDownCards(deck){
+        let newDeck = deck.map((card,i) => {
+            if(card.flipped){
+                deck[i].flipped = false;
+            }
+            return card;
+        });
+
+        return newDeck;
+    }
+
+    /**
+     * Mark cards as matched in the deck
+     */
+    matchCards(deck){
+        let newDeck = deck.map((card,i) => {
+            if(card.flipped){
+                deck[i].flipped = "matched";
+            }
+            return card;
+        });
+
+        return newDeck;
+    }
+
+    /**
+     * Randomize the cards
+     */
     shuffleDeck() {
         console.log('Game:shuffleDeck');
         let {boardSize} = this.state, deck = [];
@@ -57,7 +115,6 @@ class Game extends React.Component {
 
         return shuffle(deck);
     }
-
 
     newGame(e){
         e.preventDefault();
@@ -79,6 +136,45 @@ class Game extends React.Component {
         this.setState({
             deck: this.shuffleDeck()
         });
+    }
+
+    componentDidUpdate(){
+        let {matchCard, pendingCard, deck} = this.state;
+
+        //No cards picked
+        if(!matchCard && !pendingCard){
+            //console.log('dont update');
+            return false;
+        }
+
+        //Bad pair picked
+        if(!!matchCard && (matchCard !== pendingCard)){
+            this.preventClick = true;
+            setTimeout(() => {
+                this.setState({
+                    matchCard: false,
+                    pendingCard: false,
+                    deck: this.flipDownCards(deck)
+                }, () => {
+                    this.preventClick = false;
+                });
+            }, 1000);
+        }
+
+        //Pair is picked
+        if(matchCard === pendingCard) {
+            this.preventClick = true;
+            console.log('good pair');
+            setTimeout(() => {
+                this.setState({
+                    matchCard: false,
+                    pendingCard: false,
+                    deck: this.matchCards(deck)
+                }, () => {
+                    this.preventClick = false;
+                });
+            }, 1000);
+        }
     }
 
     render() {

@@ -36,7 +36,7 @@ class Board extends React.Component {
     }
 
     render() {
-        console.log('board:render');
+        //console.log('board:render');
         return (
             <div id="board"
                  className={this.boardClassName}
