@@ -181,10 +181,10 @@ class Game extends React.Component {
         let {boardSize, seconds,deck} = this.state;
         return (
             <div className="row">
-                <div className="col-sm-9">
+                <div className="col-xs-12 col-sm-9">
                     <Board size={boardSize} deck={deck} onClick={(e) => this.handleClick(e)}/>
                 </div>
-                <div id="status" className="col-sm-3">
+                <div className="col-xs-12 col-sm-3">
                     <hr/>
                     <div className="well well-lg text-center">
                         <Timer time={seconds} />
