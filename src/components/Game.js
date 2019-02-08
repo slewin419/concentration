@@ -1,7 +1,7 @@
 import React from 'react';
 import Board from './Board';
 import Timer from "./Timer";
-import Deck, {flipCard, flipAll, makePair, isPair} from "../lib/Deck";
+import Deck, {flipCard, makePair, isPair} from "../lib/Deck";
 
 class Game extends React.Component {
 
@@ -21,16 +21,18 @@ class Game extends React.Component {
     }
 
     handleClick(e) {
-        if (this.preventClick) return;
+        if (this.preventClick || (e.target.id === "board")) return;
 
         let {pendingMatch, deck} = this.state;
+
+        if(pendingMatch.length === 2) return;
 
         if (!pendingMatch.length) {
             let cardId = e.target.id;
 
             this.setState({
                 deck: flipCard(deck, cardId),
-                pendingMatch: [cardId, '']
+                pendingMatch: [cardId]
             });
         } else {
             let cardId = e.target.id;
@@ -139,9 +141,10 @@ class Game extends React.Component {
             if (!isPair(card1,card2)) {
                 console.log('bad pair');
                 this.preventClick = true;
+
                 setTimeout(() => {
                     this.setState({
-                        pendingMatch: ['', ''],
+                        pendingMatch: [],
                         deck: flipCard(flipCard(deck, card1, 'down'), card2, 'down')
                     });
                     this.preventClick = false;
@@ -149,7 +152,17 @@ class Game extends React.Component {
 
             } else {
                 console.log('pair!');
-                isPair(card1,card2);
+                makePair(deck, pendingMatch);
+                this.preventClick = true;
+
+                setTimeout(() => {
+                    this.setState({
+                        pendingMatch:[],
+                        deck: makePair(deck, pendingMatch)
+                    });
+                    this.preventClick = false;
+                }, 1000);
+
 
             }
         }

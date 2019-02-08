@@ -9,9 +9,9 @@ class Card extends React.Component {
     }
 
     render() {
-        let {id, img, flipped} = this.props;
+        let {id, img, flipped, matched} = this.props;
 
-        if(flipped === "matched"){
+        if(matched){
             return this.renderMatchedCard();
         }
 
