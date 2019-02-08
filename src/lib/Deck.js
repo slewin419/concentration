@@ -72,7 +72,6 @@ var makePair = (deck = [], match = []) => {
  * @returns {boolean}
  */
 var isPair = (card1 = '',card2 = '') => {
-    debugger;
     var re = /(\w*)-\d{1,2}/;
     return re.exec(card1)[1] === re.exec(card2)[1];
 }

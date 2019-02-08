@@ -13,7 +13,7 @@ class Game extends React.Component {
         this.state = {
             seconds: 0,
             deck: this._Deck.deck,
-            pendingMatch: ['', '']
+            pendingMatch: [],
         };
 
         //Use this flag to prevent clicking card while flipping down
@@ -25,7 +25,7 @@ class Game extends React.Component {
 
         let {pendingMatch, deck} = this.state;
 
-        if (pendingMatch[0] === '') {
+        if (!pendingMatch.length) {
             let cardId = e.target.id;
 
             this.setState({
