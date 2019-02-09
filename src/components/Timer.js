@@ -1,4 +1,5 @@
 import React from 'react';
+import TimeFormat from 'hh-mm-ss';
 
 class Timer extends React.Component {
     constructor(props) {
@@ -7,10 +8,11 @@ class Timer extends React.Component {
         this.state = {};
     }
 
-    render() {        
+    render() {
+        console.log(TimeFormat);
         return (
             <div id="timer">
-                {this.props.time || 0}s
+                {TimeFormat.fromS(this.props.time) || 0}
             </div>
         );
     }

@@ -71,12 +71,6 @@ class Game extends React.Component {
         });
     }
 
-    componentDidMount() {
-        this.setState({
-            //deck: new Deck()
-        });
-    }
-
     componentDidUpdate() {
         let {pendingMatch, deck} = this.state;
 
