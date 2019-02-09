@@ -42,72 +42,7 @@ class Game extends React.Component {
                 pendingMatch: [pendingMatch[0], cardId]
             });
         }
-    }
-
-    /**
-     * Update the deck state array to flip the selected card
-     */
-    /*flipCard(deck, cardId) {
-        if(!deck.length) return;
-
-        let pendingIndex = deck.findIndex(card => card.id === cardId);
-
-        if(pendingIndex !== -1) {
-            deck[pendingIndex].flipped = true;
-        }
-
-        let flippedCard = deck[pendingIndex];
-
-        return {
-            deck: deck,
-            pendingId: flippedCard && flippedCard['img'] || null
-        };
-    }*/
-
-    /**
-     * Flip cards down when mismatched cards picked
-     * @param deck
-     */
-    /*flipDownCards(deck){
-        let newDeck = deck.map((card,i) => {
-            if(card.flipped){
-                deck[i].flipped = false;
-            }
-            return card;
-        });
-
-        return newDeck;
-    }*/
-
-    /**
-     * Mark cards as matched in the deck
-     */
-    /*matchCards(deck){
-        let newDeck = deck.map((card,i) => {
-            if(card.flipped){
-                deck[i].flipped = "matched";
-            }
-            return card;
-        });
-
-        return newDeck;
-    }*/
-
-    /**
-     * Randomize the cards
-     */
-
-    /*shuffleDeck() {
-        console.log('Game:shuffleDeck', this.state.deck);
-        let {boardSize, deck} = this.state;
-
-        deck.slice(0, deck.length).forEach((card, i) => {
-            deck.push({"id":`${card}_${++i}`, "img": card, "flipped": false});
-            deck.push({"id":`${card}_${++i}`, "img": card, "flipped": false});
-        });
-
-        return deck;
-    }*/
+    }    
 
     newGame(e) {
         e.preventDefault();
@@ -132,38 +67,28 @@ class Game extends React.Component {
 
         //No cards picked
         if (!card1 && !card2) {
-            console.log('no cards picked');
             return false;
         }
 
         //Bad pair picked
         if (card1 && card2) {
             if (!isPair(card1,card2)) {
-                console.log('bad pair');
-                this.preventClick = true;
 
                 setTimeout(() => {
                     this.setState({
                         pendingMatch: [],
                         deck: flipCard(flipCard(deck, card1, 'down'), card2, 'down')
                     });
-                    this.preventClick = false;
                 }, 1000);
 
-            } else {
-                console.log('pair!');
-                makePair(deck, pendingMatch);
-                this.preventClick = true;
+            } else {                
 
                 setTimeout(() => {
                     this.setState({
                         pendingMatch:[],
                         deck: makePair(deck, pendingMatch)
                     });
-                    this.preventClick = false;
                 }, 1000);
-
-
             }
         }
     }

@@ -1,25 +1,18 @@
 import React from 'react';
 
-class Card extends React.Component {
-
-    renderMatchedCard(){
-        return (
-            <div className="card matched"></div>
-        )
-    }
+class Card extends React.Component {    
 
     render() {
-        let {id, img, flipped, matched} = this.props;
+        let {id, img} = this.props;
 
-        if(matched){
-            return this.renderMatchedCard();
-        }
+        let flipped = this.props.flipped ? 'flipped' : '',
+            matched = this.props.matched ? 'matched' : '';
 
         return (
-            <div className={'card ' + (flipped ? 'flipped':'')}>
+            <div className={`card ${flipped} ${matched}`}>
                 <div className="card-wrapper ">
                     <div id={id} data-match={img} className="front side"></div>
-                    <div className={'back side ' + img}></div>
+                    <div className={`back side ${img}`}></div>
                 </div>
             </div>
         )
