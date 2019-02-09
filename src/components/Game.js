@@ -11,26 +11,43 @@ class Game extends React.Component {
         this._Deck = new Deck();
 
         this.state = {
-            seconds: 0,
             deck: this._Deck.deck,
             pendingMatch: [],
+            gameStarted: false,
+            time: 0 //in seconds
         };
+    }
 
-        //Use this flag to prevent clicking card while flipping down
-        this.preventClick = false;
+    startTimer(){
+        console.log('Game:startTimer');
+        setInterval(() => {
+            this.setState((prevState) => {
+                return {
+                    time: ++prevState.time
+                };
+            });    
+        }, 1000);
     }
 
     handleClick(e) {
-        if (this.preventClick || (e.target.id === "board")) return;
+        let {pendingMatch, deck, gameStarted} = this.state;
 
-        let {pendingMatch, deck} = this.state;
+        if (e.target.id === "board" || pendingMatch.length === 2) return;
 
         if(pendingMatch.length === 2) return;
+
+        if(!gameStarted){
+            this.startTimer();
+            this.setState({
+                gameStarted: true
+            });            
+        }
 
         if (!pendingMatch.length) {
             let cardId = e.target.id;
 
             this.setState({
+                gameStarted: true,
                 deck: flipCard(deck, cardId),
                 pendingMatch: [cardId]
             });
@@ -95,7 +112,7 @@ class Game extends React.Component {
 
 
     render() {
-        let {seconds, deck} = this.state;
+        let {time, deck} = this.state;
         return (
             <div className="row">
                 <div className="col-xs-12 col-sm-9">
@@ -105,7 +122,7 @@ class Game extends React.Component {
                 <div className="col-xs-10 col-xs-offset-1 col-sm-2 col-sm-offset-0">
                     <hr/>
                     <div className="well well-lg text-center">
-                        <Timer time={seconds}/>
+                        <Timer time={time}/>
                     </div>
                     <table className="table table-bordered table-striped table-condensed">
                         <tbody>
