@@ -3,6 +3,8 @@ import Board from './Board';
 import Timer from "./Timer";
 import Deck, {flipCard, makePair, isPair} from "../lib/Deck";
 
+const TURN_DELAY = 1000;
+
 class Game extends React.Component {
 
     constructor(props) {
@@ -16,10 +18,11 @@ class Game extends React.Component {
             gameStarted: false,
             time: 0 //in seconds
         };
+
+        this.preventClick = true;
     }
 
     startTimer(){
-        console.log('Game:startTimer');
         setInterval(() => {
             this.setState((prevState) => {
                 return {
@@ -83,23 +86,29 @@ class Game extends React.Component {
 
         //Bad pair picked
         if (card1 && card2) {
+            
+            let handlePendingMatch = (state) => {
+                this.preventClick = true;
+                setTimeout(() => {
+                    this.setState(state);
+                },TURN_DELAY);
+                this.preventClick = false;
+            }
+            
             if (!isPair(card1,card2)) {
 
-                setTimeout(() => {
-                    this.setState({
-                        pendingMatch: [],
-                        deck: flipCard(flipCard(deck, card1, 'down'), card2, 'down')
-                    });
-                }, 1000);
+                handlePendingMatch({
+                    pendingMatch: [],
+                    deck: flipCard(flipCard(deck, card1, 'down'), card2, 'down')
+                });                
 
             } else {                
 
-                setTimeout(() => {
-                    this.setState({
-                        pendingMatch:[],
-                        deck: makePair(deck, pendingMatch)
-                    });
-                }, 1000);
+                handlePendingMatch({
+                    pendingMatch:[],
+                    deck: makePair(deck, pendingMatch)
+                });
+                                
             }
         }
     }
