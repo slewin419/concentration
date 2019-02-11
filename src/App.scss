@@ -13,10 +13,14 @@ main {
     transform: rotateY(180deg);
   }
 
-  &.matched {
-    border: 1px solid green;
-    border-radius: 3px;
-    pointer-events: none;
+  &.flipped.matched {
+    border: 3px solid green;
+
+    .card-wrapper{
+      border-radius: 3px;
+      pointer-events: none;    
+      transform: rotateY(180deg);
+    }
   }
 
   .card-wrapper {
@@ -42,7 +46,6 @@ main {
   .back {
     transform:rotateY(180deg);
     background: white;
-    border: 1px solid #F44336;
   }
 }
 
@@ -54,7 +57,7 @@ main {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
   grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr;
-  grid-gap: 3px;
+  grid-gap: 1px;
   justify-items: center;
 
   @media screen and (min-width: 600px){
@@ -68,8 +71,8 @@ main {
   }
 
   @media screen and (min-width: 1200px){
-    width: 900px;
-    height: 900px;
+    width: 850px;
+    height: 850px;
   }
 }
 
