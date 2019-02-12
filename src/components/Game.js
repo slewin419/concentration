@@ -2,51 +2,86 @@ import React from 'react';
 import Board from './Board';
 import Timer from "./Timer";
 
-import Deck, {flipCard, makePair, isPair} from "../lib/Deck";
+import Deck, {flipCard, makePair, isPair, isGameOver} from "../lib/Deck";
 
-const TURN_DELAY = 1000;
+const TURN_DELAY = 800;
 
 class Game extends React.Component {
 
     constructor(props) {
         super(props);
-        
-        this._Deck = new Deck();
 
-        this._Deck = new Deck();
+        this.deck = new Deck();
+        this.timerInterval = null;
+        this.preventClick = true;
 
         this.state = {
-            deck: this._Deck.deck,
+            deck: this.deck,
             pendingMatch: [],
             gameStarted: false,
+            gameComplete: false,
             time: 0 //in seconds
         };
-
-        this.preventClick = true;
     }
 
     startTimer(){
-        setInterval(() => {
+        this.timerInterval = setInterval(() => {
             this.setState((prevState) => {
                 return {
                     time: ++prevState.time
                 };
-            });    
+            });
         }, 1000);
+    }
+
+    stopTimer(){
+        clearInterval(this.timerInterval);
+    }
+
+    handlePendingMatch(state) {
+        this.preventClick = true;
+        setTimeout(() => {
+            this.setState({
+                pendingMatch: [],
+                ...state
+            }, () => {
+                this.preventClick = false;
+
+                if(isGameOver(this.state.deck)){
+                    this.setState({
+                        gameComplete: true
+                    });
+                }
+            });
+        }, TURN_DELAY);
+    }
+
+    handleCardPicked(card1,card2,deck, pendingMatch) {
+        if (card1 && card2) {
+            if (!isPair(card1,card2)) {
+                this.handlePendingMatch({
+                    deck: flipCard(flipCard(deck, card1, 'down'), card2, 'down')
+                });
+            } else {
+                this.handlePendingMatch({
+                    deck: makePair(deck, pendingMatch)
+                });
+            }
+        }
     }
 
     handleClick(e) {
         let {pendingMatch, deck, gameStarted} = this.state;
 
-        if (e.target.id === "board" || pendingMatch.length === 2) return;
-
-        if(pendingMatch.length === 2) return;
+        if (!/(\w*)-\d{1,2}/.test(e.target.id)
+            || pendingMatch.length === 2)
+            return;
 
         if(!gameStarted){
-            this.startTimer();
+            //this.startTimer();
             this.setState({
                 gameStarted: true
-            });            
+            });
         }
 
         if (!pendingMatch.length) {
@@ -56,6 +91,9 @@ class Game extends React.Component {
                 gameStarted: true,
                 deck: flipCard(deck, cardId),
                 pendingMatch: [cardId]
+            }, () => {
+                let {pendingMatch, deck} = this.state;
+                this.handleCardPicked(pendingMatch[0], pendingMatch[1], deck, pendingMatch);
             });
         } else {
             let cardId = e.target.id;
@@ -63,73 +101,40 @@ class Game extends React.Component {
             this.setState({
                 deck: flipCard(deck, cardId),
                 pendingMatch: [pendingMatch[0], cardId]
+            }, () => {
+                let {pendingMatch, deck} = this.state;
+                this.handleCardPicked(pendingMatch[0], pendingMatch[1], deck, pendingMatch);
             });
         }
-    }    
-
-    newGame(e) {
-        e.preventDefault();
     }
 
-    resetGame() {
+    newGame(e) {
+        let newDeck = new Deck();
         this.setState({
-            cards: null
+            gameStarted: false,
+            gameComplete: false,
+            pendingMatch: [],
+            deck: newDeck,
+            time: 0
+        }, () => {
+            //this.stopTimer();
         });
     }
 
-    componentDidUpdate() {
-        let {pendingMatch, deck} = this.state;
-
-        let card1 = pendingMatch[0], card2 = pendingMatch[1];
-
-        //No cards picked
-        if (!card1 && !card2) {
-            return false;
-        }
-
-        //Bad pair picked
-        if (card1 && card2) {
-            
-            let handlePendingMatch = (state) => {
-                this.preventClick = true;
-                setTimeout(() => {
-                    this.setState(state);
-                },TURN_DELAY);
-                this.preventClick = false;
-            }
-            
-            if (!isPair(card1,card2)) {
-
-                handlePendingMatch({
-                    pendingMatch: [],
-                    deck: flipCard(flipCard(deck, card1, 'down'), card2, 'down')
-                });                
-
-            } else {                
-
-                handlePendingMatch({
-                   deck: makePair(deck, pendingMatch)
-                });
-                                
-            }
-        }
-    }
-
-
     render() {
-        let {time, deck} = this.state;
+        let {time, deck, gameComplete} = this.state;
         return (
             <div className="row">
                 <div className="col-xs-12 col-sm-9">
                     <h1 className="text-center">Concentration</h1>
                     <Board deck={deck} onClick={(e) => this.handleClick(e)}/>
+                    <h1 className="text-center">{gameComplete ? 'You Won!' : ''}</h1>
                 </div>
                 <div className="col-xs-10 col-xs-offset-1 col-sm-2 col-sm-offset-0">
-                    <hr/>
-                    <div className="well well-lg text-center">
+                    <div className="well well-lg text-center hidden">
                         <Timer time={time}/>
                     </div>
-                    <table className="table table-bordered table-striped table-condensed">
+                    <table className="table table-bordered table-striped table-condensed hidden">
                         <tbody>
                         <tr>
                             <td>Turns:</td>
@@ -149,13 +154,14 @@ class Game extends React.Component {
                         </tr>
                         </tbody>
                     </table>
-                    <button className="btn btn-lg btn-danger btn-block">Reset</button>
-                    <hr/>
                     <button
                         className="btn btn-lg btn-primary btn-block"
                         onClick={(e) => this.newGame(e)}>
                         New Game
                     </button>
+                </div>
+                <div className="col-xs-12">
+                    <h1 className="well text-center">Scoreboard coming soon!</h1>
                 </div>
             </div>
         )

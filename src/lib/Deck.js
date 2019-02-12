@@ -6,7 +6,7 @@ const IMAGES = ['bootstrap', 'css3', 'git', 'gulp', 'heroku', 'html5', 'javascri
 export default class Deck {
 
     constructor() {
-        this.deck = this.buildDeck();
+        return this.buildDeck();
     }
 
     /**
@@ -66,7 +66,7 @@ var makePair = (deck = [], match = []) => {
 }
 
 /**
- *
+ * Determine if two cards match.
  * @param card1
  * @param card2
  * @returns {boolean}
@@ -76,7 +76,13 @@ var isPair = (card1 = '',card2 = '') => {
     return re.exec(card1)[1] === re.exec(card2)[1];
 }
 
-export {flipCard, flipAll, makePair, isPair};
+var isGameOver = (deck) => {
+    return deck.every((card) => {
+        return card.matched === true;
+    });
+}
+
+export {flipCard, flipAll, makePair, isPair, isGameOver};
 
 
 

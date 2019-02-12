@@ -5,7 +5,7 @@ import Card from './Card';
 
 class Board extends React.Component {
 
-    
+
     /**
      *
      * @param props {size,cards}
@@ -16,10 +16,6 @@ class Board extends React.Component {
         this.state = {
             size: "44",
         };
-    }
-
-    boardStyle(){
-        return {};
     }
 
     renderCard(id,img, flipped, matched) {
@@ -39,11 +35,9 @@ class Board extends React.Component {
     }
 
     render() {
-        //console.log('board:render');
         return (
             <div id="board"
                  className={this.boardClassName}
-                 style={this.boardStyle()}
                  onClick={this.props.onClick}>
                 {this.renderBoard()}
             </div>
