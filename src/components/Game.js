@@ -130,7 +130,8 @@ class Game extends React.Component {
                     <Board deck={deck} onClick={(e) => this.handleClick(e)}/>
                     <h1 className="text-center">{gameComplete ? 'You Won!' : ''}</h1>
                 </div>
-                <div className="col-xs-10 col-xs-offset-1 col-sm-2 col-sm-offset-0">
+                <div className="col-xs-10 col-xs-offset-1 col-sm-2 col-sm-offset-0">   
+                    <h1>&nbsp;</h1>                 
                     <div className="well well-lg text-center hidden">
                         <Timer time={time}/>
                     </div>

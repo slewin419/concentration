@@ -80,18 +80,12 @@ main {
   font-size: 16px;
 }
 
-#status {
-
-}
-
-
-
 /* Mixins */
 $skills: ('bootstrap', 'css3', 'git', 'gulp', 'heroku', 'html5', 'javascript', 'jquery', 'linux', 'materialui',
           'mysql', 'nodejs', 'npm', 'php', 'react', 'sass', 'stackoverflow', 'zend');
 
 @mixin cardImg($name) {
-  background-image: url('/images/#{$name}.png');
+  background-image: url('./images/#{$name}.png');
 }
 .card .back {
   background-size: cover;
