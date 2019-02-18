@@ -20,22 +20,7 @@ class Game extends React.Component {
             pendingMatch: [],
             gameStarted: false,
             gameComplete: false,
-            time: 0 //in seconds
         };
-    }
-
-    startTimer(){
-        this.timerInterval = setInterval(() => {
-            this.setState((prevState) => {
-                return {
-                    time: ++prevState.time
-                };
-            });
-        }, 1000);
-    }
-
-    stopTimer(){
-        clearInterval(this.timerInterval);
     }
 
     handlePendingMatch(state) {
@@ -78,7 +63,6 @@ class Game extends React.Component {
             return;
 
         if(!gameStarted){
-            //this.startTimer();
             this.setState({
                 gameStarted: true
             });
@@ -122,7 +106,7 @@ class Game extends React.Component {
     }
 
     render() {
-        let {time, deck, gameComplete} = this.state;
+        let {deck, gameComplete} = this.state;
         return (
             <div className="row">
                 <div className="col-xs-12 col-sm-9">
@@ -132,8 +116,8 @@ class Game extends React.Component {
                 </div>
                 <div className="col-xs-10 col-xs-offset-1 col-sm-2 col-sm-offset-0">   
                     <h1>&nbsp;</h1>                 
-                    <div className="well well-lg text-center hidden">
-                        <Timer time={time}/>
+                    <div className="well well-lg text-center">
+                        <Timer running={this.state.gameStarted} />
                     </div>
                     <table className="table table-bordered table-striped table-condensed hidden">
                         <tbody>
