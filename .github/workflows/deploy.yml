@@ -12,7 +12,7 @@ concurrency:
 jobs:
   deploy:
     name: Build & Deploy on Host
-    runs-on: [self-hosted, linux, ARM64, pi-prod]
+    runs-on: [self-hosted, Linux, ARM64, pi-prod]
 
     steps:
       - name: Checkout Code
