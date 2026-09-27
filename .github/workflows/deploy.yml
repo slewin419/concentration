@@ -38,10 +38,6 @@ jobs:
             --exclude 'tests' \
             ./ /opt/app/ 
 
-          mkdir -p /opt/app
-          cp -r . /opt/app/          
-          cd /opt/app
-
           # Build and launch ARM64 containers natively
           docker compose down --remove-orphans
           docker compose up -d --build --force-recreate
