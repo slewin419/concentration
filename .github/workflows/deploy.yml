@@ -1,0 +1,51 @@
+name: Deploy to Pi Production
+
+on:
+  push:
+    branches:
+      - master
+
+concurrency:
+  group: production_deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Build & Deploy on Host
+    runs-on: [self-hosted, linux, ARM64, pi-prod]
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Verify Architecture & Docker
+        run: |
+          echo "Host Architecture: $(uname -m)"
+          docker info > /dev/null
+
+      - name: Deploy Stack
+        run: |
+          # Sync repository checkout into production runtime directory
+          mkdir -p /opt/app
+          cp -r . /opt/app/
+          cd /opt/app
+
+          # Build and launch ARM64 containers natively
+          docker compose down --remove-orphans
+          docker compose up -d --build --force-recreate
+
+      - name: Healthcheck Verification
+        run: |
+          sleep 5
+          STATUS=$(docker inspect --format='{{.State.Status}}' production-web || echo "missing")
+          if [ "$STATUS" != "running" ]; then
+            echo "Error: production-web is not running (Status: $STATUS)"
+            docker logs production-web --tail 50
+            exit 1
+          fi
+          echo "Deployment successful: production-web is healthy."
+
+      - name: Prune Stale Docker Assets
+        if: always()
+        run: |
+          docker image prune -f
