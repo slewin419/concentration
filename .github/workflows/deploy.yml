@@ -29,6 +29,7 @@ jobs:
 
           # Sync repository checkout into production runtime directory
           sudo install -d -o "$USER" -g "$(id -gn)" /opt/app
+          
           rsync -a --delete \
             --exclude '.git' \
             --exclude '.github' \
@@ -36,9 +37,8 @@ jobs:
             --exclude 'tests' \
             ./ /opt/app/ 
 
-          # mkdir -p /opt/app
-          # cp -r . /opt/app/
-          
+          mkdir -p /opt/app
+          cp -r . /opt/app/         
           cd /opt/app
 
           # Build and launch ARM64 containers natively
