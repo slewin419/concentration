@@ -25,9 +25,20 @@ jobs:
 
       - name: Deploy Stack
         run: |
+          set -euo pipefail
+
           # Sync repository checkout into production runtime directory
-          mkdir -p /opt/app
-          cp -r . /opt/app/
+          sudo install -d -o "$USER" -g "$(id -gn)" /opt/app
+          rsync -a --delete \
+            --exclude '.git' \
+            --exclude '.github' \
+            --exclude 'node_modules' \
+            --exclude 'tests' \
+            ./ /opt/app/ 
+
+          # mkdir -p /opt/app
+          # cp -r . /opt/app/
+          
           cd /opt/app
 
           # Build and launch ARM64 containers natively
