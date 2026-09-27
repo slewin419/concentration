@@ -27,9 +27,10 @@ jobs:
         run: |
           set -euo pipefail
 
+          # Ensure directory exists with proper permissions
+          mkdir -p /opt/app
+
           # Sync repository checkout into production runtime directory
-          sudo install -d -o "$USER" -g "$(id -gn)" /opt/app
-          
           rsync -a --delete \
             --exclude '.git' \
             --exclude '.github' \
@@ -38,7 +39,7 @@ jobs:
             ./ /opt/app/ 
 
           mkdir -p /opt/app
-          cp -r . /opt/app/         
+          cp -r . /opt/app/          
           cd /opt/app
 
           # Build and launch ARM64 containers natively
