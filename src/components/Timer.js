@@ -25,9 +25,8 @@ class Timer extends React.Component {
     }
 
     reset(){
-        this.setState({time: 0}, () => {
-            this.stop();
-        });
+        this.stop();
+        this.setState({time: 0});
     }
 
     componentWillReceiveProps(props){
@@ -35,8 +34,8 @@ class Timer extends React.Component {
             this.start();
         }
 
-        if(!props.running && this.state.time > 0){
-            this.stop();
+        if(!props.running && this.props.running){
+            this.reset();
         }
     }
 
